@@ -26,6 +26,26 @@ export default function (createElement) {
       }
 
       return schema
+    },
+    validate: function (schema, value) {
+      var validate = (Array.isArray(schema.validate)) ? schema.validate : [schema.validate]
+      var ok = []
+
+      for (let key in validate) {
+        ok.push(validate[key].call(this, value))
+      }
+
+      return (ok.indexOf(true) > -1)
+    },
+    stringToObject: function (value) {
+      if (typeof value === 'string') {
+        value = {
+          text: value,
+          value: value
+        }
+      }
+
+      return value
     }
   }
 }

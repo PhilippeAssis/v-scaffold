@@ -9,7 +9,8 @@ export default function (schema, createElement) {
 
   if (schema.options) {
     for (let key in schema.options) {
-      let option = schema.options[key]
+      let option = util.stringToObject(schema.options[key])
+
       let template = {
         attrs: {
           type: 'radio',
@@ -19,23 +20,19 @@ export default function (schema, createElement) {
         },
         on: {
           click: function (event) {
-            vm.$emit(`change-${schema.key}`, event.target.value)
+            vm.$emit(`pre-change-${schema.key}`, event.target.value)
           }
         }
       }
-
-      console.log('schema.template.on.input')
-      console.log(schema.template.on.input)
-      console.log(template)
 
       if (option.attrs) {
         template = merge(true, option.attrs, template)
       }
 
       let radio = createElement('input', template)
-      let spam = createElement('spam', option.text)
+      let span = createElement('span', option.text)
 
-      options.push(createElement('label', [radio, spam]))
+      options.push(createElement('label', [radio, span]))
     }
   }
 
